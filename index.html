@@ -418,7 +418,7 @@ body {
 
   <div class="q-card" id="q-card">
     <div class="invention-img-wrap">
-      <img id="inv-img" src="" alt="invention" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 800 450%22%3E%3Crect fill=%22%232d3170%22 width=%22800%22 height=%22450%22/%3E%3Ctext y=%22200%22 x=%22400%22 text-anchor=%22middle%22 font-size=%22100%22%3E🔬%3C/text%3E%3Ctext y=%22280%22 x=%22400%22 text-anchor=%22middle%22 font-size=%2224%22 fill=%22%238890b0%22%3EImage not found%3C/text%3E%3C/svg%3E'">
+      <canvas id="inv-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;display:block;"></canvas>
       <div class="img-overlay"></div>
       <div class="invention-label" id="inv-label"></div>
     </div>
@@ -428,7 +428,7 @@ body {
 
   <div class="detail-card" id="detail-card">
     <div class="detail-header">
-      <img class="scientist-thumb" id="sci-thumb" src="" alt="scientist" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 60 60%22><rect fill=%22%232d3170%22 width=%2260%22 height=%2260%22 rx=%2230%22/><text y=%2240%22 x=%2230%22 text-anchor=%22middle%22 font-size=%2228%22>🧑‍🔬</text></svg>'">
+      <canvas class="scientist-thumb" id="sci-thumb" width="58" height="58"></canvas>
       <div>
         <div class="detail-name" id="sci-name"></div>
         <div class="detail-years" id="sci-years"></div>
@@ -497,7 +497,7 @@ const LEVELS = [
     num: 1, name: "Pioneers", color: "#4e54c8",
     questions: [
       {
-        invention: "Telephone", invImg: "images/telephone.jpg", invLabel: "Telephone (1876)",
+        invention: "Telephone", invEmoji: "📞", invGrad1: "#1a1d6e", invGrad2: "#4e54c8", invImg: "images/telephone.jpg", invLabel: "Telephone (1876)",
         sciImg: "images/bell.jpg", answer: "Alexander Graham Bell",
         options: ["Thomas Edison", "Alexander Graham Bell", "Nikola Tesla", "Samuel Morse"],
         invDesc: "The telephone revolutionized human communication, allowing voice transmission over long distances for the first time.",
@@ -505,7 +505,7 @@ const LEVELS = [
         trivia: "Bell originally wanted the telephone greeting to be 'Ahoy!' — it was Thomas Edison who popularized 'Hello'."
       },
       {
-        invention: "Light Bulb", invImg: "images/lightbulb.jpg", invLabel: "Practical Light Bulb (1879)",
+        invention: "Light Bulb", invEmoji: "💡", invGrad1: "#5c3a00", invGrad2: "#c87800", invImg: "images/lightbulb.jpg", invLabel: "Practical Light Bulb (1879)",
         sciImg: "images/edison.jpg", answer: "Thomas Edison",
         options: ["Thomas Edison", "Michael Faraday", "James Watt", "Nikola Tesla"],
         invDesc: "Edison's incandescent light bulb made electric lighting practical and eventually replaced gas lighting worldwide.",
@@ -513,7 +513,7 @@ const LEVELS = [
         trivia: "Edison tested over 6,000 materials before settling on carbonized bamboo as the perfect filament for his bulb."
       },
       {
-        invention: "Airplane", invImg: "images/airplane.jpg", invLabel: "Powered Airplane (1903)",
+        invention: "Airplane", invEmoji: "✈️", invGrad1: "#002244", invGrad2: "#0055aa", invImg: "images/airplane.jpg", invLabel: "Powered Airplane (1903)",
         sciImg: "images/wright.jpg", answer: "Wright Brothers",
         options: ["Wright Brothers", "Henry Ford", "Charles Lindbergh", "Otto Lilienthal"],
         invDesc: "The Wright Brothers' 1903 Flyer made the first sustained, controlled, powered heavier-than-air flight at Kitty Hawk, North Carolina.",
@@ -521,7 +521,7 @@ const LEVELS = [
         trivia: "The first flight lasted only 12 seconds and covered 120 feet — shorter than the wingspan of a modern Boeing 747."
       },
       {
-        invention: "Steam Engine", invImg: "images/steam_engine.jpg", invLabel: "Steam Engine (1769)",
+        invention: "Steam Engine", invEmoji: "🚂", invGrad1: "#1a0a00", invGrad2: "#7a3300", invImg: "images/steam_engine.jpg", invLabel: "Steam Engine (1769)",
         sciImg: "images/watt.jpg", answer: "James Watt",
         options: ["James Watt", "George Stephenson", "Robert Fulton", "Richard Trevithick"],
         invDesc: "James Watt's improved steam engine dramatically increased efficiency, powering the Industrial Revolution.",
@@ -529,7 +529,7 @@ const LEVELS = [
         trivia: "The unit of power — the 'Watt' — is named after him. One horsepower equals 746 watts."
       },
       {
-        invention: "Printing Press", invImg: "images/printing_press.jpg", invLabel: "Printing Press (~1440)",
+        invention: "Printing Press", invEmoji: "📰", invGrad1: "#1a1200", invGrad2: "#5c4800", invImg: "images/printing_press.jpg", invLabel: "Printing Press (~1440)",
         sciImg: "images/gutenberg.jpg", answer: "Johannes Gutenberg",
         options: ["Johannes Gutenberg", "Benjamin Franklin", "Leonardo da Vinci", "Francis Bacon"],
         invDesc: "Gutenberg's printing press used movable type to mass-produce books, democratizing knowledge and fueling the Renaissance.",
@@ -537,7 +537,7 @@ const LEVELS = [
         trivia: "The Gutenberg Bible (1455) was the first major book printed using movable type — fewer than 50 complete copies survive today."
       },
       {
-        invention: "Penicillin", invImg: "images/penicillin.jpg", invLabel: "Penicillin (1928)",
+        invention: "Penicillin", invEmoji: "🧫", invGrad1: "#002200", invGrad2: "#006600", invImg: "images/penicillin.jpg", invLabel: "Penicillin (1928)",
         sciImg: "images/fleming.jpg", answer: "Alexander Fleming",
         options: ["Alexander Fleming", "Louis Pasteur", "Joseph Lister", "Robert Koch"],
         invDesc: "Penicillin was the world's first antibiotic, saving millions of lives by treating bacterial infections that were previously fatal.",
@@ -545,7 +545,7 @@ const LEVELS = [
         trivia: "Fleming noticed the mold was killing bacteria in a contaminated petri dish he was about to throw away — sometimes the greatest discoveries come from accidents!"
       },
       {
-        invention: "Gravity & Laws of Motion", invImg: "images/gravity.jpg", invLabel: "Laws of Motion (1687)",
+        invention: "Gravity & Laws of Motion", invEmoji: "🍎", invGrad1: "#001a00", invGrad2: "#003d00", invImg: "images/gravity.jpg", invLabel: "Laws of Motion (1687)",
         sciImg: "images/newton.jpg", answer: "Isaac Newton",
         options: ["Isaac Newton", "Galileo Galilei", "Albert Einstein", "René Descartes"],
         invDesc: "Newton's Principia Mathematica described the laws of motion and universal gravitation, forming the bedrock of classical mechanics.",
@@ -553,7 +553,7 @@ const LEVELS = [
         trivia: "Newton supposedly developed his theory of gravity after watching an apple fall from a tree — though the apple reportedly did NOT hit him on the head!"
       },
       {
-        invention: "Vaccination", invImg: "images/vaccination.jpg", invLabel: "Smallpox Vaccine (1796)",
+        invention: "Vaccination", invEmoji: "💉", invGrad1: "#001a33", invGrad2: "#004d99", invImg: "images/vaccination.jpg", invLabel: "Smallpox Vaccine (1796)",
         sciImg: "images/jenner.jpg", answer: "Edward Jenner",
         options: ["Edward Jenner", "Louis Pasteur", "Robert Koch", "Joseph Lister"],
         invDesc: "Edward Jenner created the first vaccine by using cowpox to immunize against smallpox, founding the field of immunology.",
@@ -561,7 +561,7 @@ const LEVELS = [
         trivia: "The word 'vaccine' comes from 'vacca', the Latin word for cow — a direct nod to Jenner's use of cowpox."
       },
       {
-        invention: "World Wide Web", invImg: "images/www.jpg", invLabel: "World Wide Web (1989)",
+        invention: "World Wide Web", invEmoji: "🌐", invGrad1: "#001a2e", invGrad2: "#0066aa", invImg: "images/www.jpg", invLabel: "World Wide Web (1989)",
         sciImg: "images/berners_lee.jpg", answer: "Tim Berners-Lee",
         options: ["Tim Berners-Lee", "Vint Cerf", "Bill Gates", "Steve Jobs"],
         invDesc: "The World Wide Web transformed the internet from an academic tool into a global information space accessible to everyone.",
@@ -569,7 +569,7 @@ const LEVELS = [
         trivia: "Berners-Lee's original proposal was titled 'Information Management: A Proposal' — his boss wrote 'Vague but exciting' on the cover page."
       },
       {
-        invention: "Automobile", invImg: "images/automobile.jpg", invLabel: "Automobile (1885)",
+        invention: "Automobile", invEmoji: "🚗", invGrad1: "#1a0000", invGrad2: "#660000", invImg: "images/automobile.jpg", invLabel: "Automobile (1885)",
         sciImg: "images/benz.jpg", answer: "Karl Benz",
         options: ["Karl Benz", "Henry Ford", "Gottlieb Daimler", "Rudolf Diesel"],
         invDesc: "Karl Benz's Patent-Motorwagen is widely regarded as the first true automobile, powered by an internal combustion engine.",
@@ -582,7 +582,7 @@ const LEVELS = [
     num: 2, name: "Innovators", color: "#FF9A3C",
     questions: [
       {
-        invention: "Radio", invImg: "images/radio.jpg", invLabel: "Radio Transmission (1895)",
+        invention: "Radio", invEmoji: "📻", invGrad1: "#001a33", invGrad2: "#003d66", invImg: "images/radio.jpg", invLabel: "Radio Transmission (1895)",
         sciImg: "images/tesla.jpg", answer: "Nikola Tesla",
         options: ["Nikola Tesla", "Guglielmo Marconi", "Heinrich Hertz", "James Clerk Maxwell"],
         invDesc: "Radio transmission enabled wireless communication, leading to radio broadcasting, radar, television, and mobile phones.",
@@ -590,7 +590,7 @@ const LEVELS = [
         trivia: "In 1943, the US Supreme Court credited Tesla as the inventor of radio, overturning Marconi's patent — four months after Tesla died."
       },
       {
-        invention: "X-Ray Machine", invImg: "images/xray.jpg", invLabel: "X-Ray (1895)",
+        invention: "X-Ray Machine", invEmoji: "🩻", invGrad1: "#0d0d1a", invGrad2: "#2d2d5e", invImg: "images/xray.jpg", invLabel: "X-Ray (1895)",
         sciImg: "images/roentgen.jpg", answer: "Wilhelm Röntgen",
         options: ["Wilhelm Röntgen", "Marie Curie", "Henri Becquerel", "Ernest Rutherford"],
         invDesc: "X-rays revolutionized medicine by allowing doctors to see inside the human body without surgery.",
@@ -598,7 +598,7 @@ const LEVELS = [
         trivia: "The first X-ray photograph was of Röntgen's wife Anna's hand — when she saw the image of her skeleton she reportedly said 'I have seen my death!'"
       },
       {
-        invention: "Radioactivity", invImg: "images/radioactivity.jpg", invLabel: "Radioactivity Research (1898)",
+        invention: "Radioactivity", invEmoji: "☢️", invGrad1: "#1a1a00", invGrad2: "#666600", invImg: "images/radioactivity.jpg", invLabel: "Radioactivity Research (1898)",
         sciImg: "images/curie.jpg", answer: "Marie Curie",
         options: ["Marie Curie", "Henri Becquerel", "Ernest Rutherford", "Lise Meitner"],
         invDesc: "Marie Curie's discovery of polonium and radium, and her research on radioactivity, transformed physics and medicine.",
@@ -606,7 +606,7 @@ const LEVELS = [
         trivia: "Marie Curie's notebooks are still so radioactive that they're kept in lead-lined boxes. Researchers must sign a waiver to view them."
       },
       {
-        invention: "Theory of Relativity", invImg: "images/relativity.jpg", invLabel: "Special Relativity (1905)",
+        invention: "Theory of Relativity", invEmoji: "🌌", invGrad1: "#000d1a", invGrad2: "#001a33", invImg: "images/relativity.jpg", invLabel: "Special Relativity (1905)",
         sciImg: "images/einstein.jpg", answer: "Albert Einstein",
         options: ["Albert Einstein", "Werner Heisenberg", "Niels Bohr", "Max Planck"],
         invDesc: "Einstein's theories of special and general relativity revolutionized physics, redefining our understanding of space, time, and gravity.",
@@ -614,7 +614,7 @@ const LEVELS = [
         trivia: "Einstein's brain was actually preserved after his death. Studies found it had an unusual parietal lobe linked to mathematical and spatial reasoning."
       },
       {
-        invention: "Transistor", invImg: "images/transistor.jpg", invLabel: "Transistor (1947)",
+        invention: "Transistor", invEmoji: "🔌", invGrad1: "#001a00", invGrad2: "#004d00", invImg: "images/transistor.jpg", invLabel: "Transistor (1947)",
         sciImg: "images/bardeen.jpg", answer: "John Bardeen",
         options: ["John Bardeen", "Lee de Forest", "William Shockley", "Gordon Moore"],
         invDesc: "The transistor replaced bulky vacuum tubes, enabling miniaturized electronics and the modern digital age.",
@@ -622,7 +622,7 @@ const LEVELS = [
         trivia: "John Bardeen is the only scientist to win two Nobel Prizes in Physics — once for the transistor (1956) and once for superconductivity (1972)."
       },
       {
-        invention: "DNA Double Helix", invImg: "images/dna.jpg", invLabel: "DNA Structure (1953)",
+        invention: "DNA Double Helix", invEmoji: "🧬", invGrad1: "#001a33", invGrad2: "#0044aa", invImg: "images/dna.jpg", invLabel: "DNA Structure (1953)",
         sciImg: "images/watson_crick.jpg", answer: "Watson & Crick",
         options: ["Watson & Crick", "Rosalind Franklin", "Linus Pauling", "Erwin Chargaff"],
         invDesc: "The discovery of DNA's double helix structure revealed how genetic information is stored and copied — the foundation of modern biology.",
@@ -630,7 +630,7 @@ const LEVELS = [
         trivia: "Watson and Crick relied heavily on an X-ray image called 'Photo 51' taken by Rosalind Franklin — without which they could not have built their model."
       },
       {
-        invention: "Polio Vaccine", invImg: "images/polio_vaccine.jpg", invLabel: "Polio Vaccine (1955)",
+        invention: "Polio Vaccine", invEmoji: "🛡️", invGrad1: "#001a33", invGrad2: "#003366", invImg: "images/polio_vaccine.jpg", invLabel: "Polio Vaccine (1955)",
         sciImg: "images/salk.jpg", answer: "Jonas Salk",
         options: ["Jonas Salk", "Louis Pasteur", "Albert Sabin", "Alexander Fleming"],
         invDesc: "Jonas Salk's polio vaccine ended one of the most feared diseases of the 20th century, which had paralyzed hundreds of thousands annually.",
@@ -638,7 +638,7 @@ const LEVELS = [
         trivia: "When asked who owned the patent for the vaccine, Salk replied: 'The people, I would say. There is no patent. Could you patent the sun?'"
       },
       {
-        invention: "Internet (TCP/IP)", invImg: "images/internet.jpg", invLabel: "Internet Protocol (1974)",
+        invention: "Internet (TCP/IP)", invEmoji: "🔗", invGrad1: "#001433", invGrad2: "#003366", invImg: "images/internet.jpg", invLabel: "Internet Protocol (1974)",
         sciImg: "images/cerf.jpg", answer: "Vint Cerf",
         options: ["Vint Cerf", "Tim Berners-Lee", "Robert Kahn", "Jon Postel"],
         invDesc: "TCP/IP protocols became the language of the internet, connecting billions of devices worldwide into a single global network.",
@@ -646,7 +646,7 @@ const LEVELS = [
         trivia: "Vint Cerf is partially deaf, which is why early email protocols were designed with such clear, text-based messaging — to be accessible to deaf users."
       },
       {
-        invention: "Photography", invImg: "images/photography.jpg", invLabel: "Photography (1839)",
+        invention: "Photography", invEmoji: "📷", invGrad1: "#1a0d00", invGrad2: "#4d2600", invImg: "images/photography.jpg", invLabel: "Photography (1839)",
         sciImg: "images/daguerre.jpg", answer: "Louis Daguerre",
         options: ["Louis Daguerre", "Fox Talbot", "Joseph Niépce", "George Eastman"],
         invDesc: "The daguerreotype was the first publicly available photographic process, allowing permanent images to be captured for the first time.",
@@ -654,7 +654,7 @@ const LEVELS = [
         trivia: "The first daguerreotype that clearly showed a human being was taken in 1838 in Paris — a man having his shoes shined stood still long enough to be captured in a 10-minute exposure."
       },
       {
-        invention: "Electricity Generator", invImg: "images/generator.jpg", invLabel: "Electric Generator (1831)",
+        invention: "Electricity Generator", invEmoji: "⚡", invGrad1: "#1a1a00", invGrad2: "#555500", invImg: "images/generator.jpg", invLabel: "Electric Generator (1831)",
         sciImg: "images/faraday.jpg", answer: "Michael Faraday",
         options: ["Michael Faraday", "James Clerk Maxwell", "Alessandro Volta", "André-Marie Ampère"],
         invDesc: "Faraday's electromagnetic induction principle led to the electric generator, making large-scale electricity production possible.",
@@ -667,7 +667,7 @@ const LEVELS = [
     num: 3, name: "Visionaries", color: "#EF476F",
     questions: [
       {
-        invention: "Photo 51 (DNA X-Ray)", invImg: "images/photo51.jpg", invLabel: "Photo 51 — X-ray of DNA (1952)",
+        invention: "Photo 51 (DNA X-Ray)", invEmoji: "🔬", invGrad1: "#001a2e", invGrad2: "#004466", invImg: "images/photo51.jpg", invLabel: "Photo 51 — X-ray of DNA (1952)",
         sciImg: "images/franklin.jpg", answer: "Rosalind Franklin",
         options: ["Rosalind Franklin", "Linus Pauling", "Maurice Wilkins", "Dorothy Crowfoot Hodgkin"],
         invDesc: "Photo 51 was a crucial X-ray diffraction image of DNA that revealed its helical structure — essential evidence for the double helix model.",
@@ -675,7 +675,7 @@ const LEVELS = [
         trivia: "Franklin's X-ray photo was shown to Watson without her knowledge. She died at 37, and Nobel Prizes cannot be awarded posthumously, so she never received one for her crucial work."
       },
       {
-        invention: "Computer (Turing Machine)", invImg: "images/turing_machine.jpg", invLabel: "Theoretical Computer (1936)",
+        invention: "Computer (Turing Machine)", invEmoji: "💻", invGrad1: "#001a00", invGrad2: "#003300", invImg: "images/turing_machine.jpg", invLabel: "Theoretical Computer (1936)",
         sciImg: "images/turing.jpg", answer: "Alan Turing",
         options: ["Alan Turing", "John von Neumann", "Charles Babbage", "Claude Shannon"],
         invDesc: "The Turing Machine was a theoretical model of computation that defined what it means for a function to be computable — the foundation of computer science.",
@@ -683,7 +683,7 @@ const LEVELS = [
         trivia: "Alan Turing's work cracking the Enigma code is estimated to have shortened WWII by two to four years. He was only recognized as a national hero long after his death."
       },
       {
-        invention: "Jet Engine", invImg: "images/jet_engine.jpg", invLabel: "Jet Engine (1930)",
+        invention: "Jet Engine", invEmoji: "🛩️", invGrad1: "#001a33", invGrad2: "#003d66", invImg: "images/jet_engine.jpg", invLabel: "Jet Engine (1930)",
         sciImg: "images/whittle.jpg", answer: "Frank Whittle",
         options: ["Frank Whittle", "Hans von Ohain", "Herbert Wagner", "Ernst Heinkel"],
         invDesc: "Frank Whittle's turbojet engine revolutionized aviation by enabling faster, higher-flying aircraft, transforming air travel globally.",
@@ -691,7 +691,7 @@ const LEVELS = [
         trivia: "Whittle's patent lapsed in 1935 because he couldn't afford the £5 renewal fee. The RAF and industry also ignored his invention for years, calling it 'impractical.'"
       },
       {
-        invention: "CRISPR Gene Editing", invImg: "images/crispr.jpg", invLabel: "CRISPR-Cas9 (2012)",
+        invention: "CRISPR Gene Editing", invEmoji: "✂️", invGrad1: "#1a001a", invGrad2: "#440044", invImg: "images/crispr.jpg", invLabel: "CRISPR-Cas9 (2012)",
         sciImg: "images/doudna.jpg", answer: "Jennifer Doudna",
         options: ["Jennifer Doudna", "Emmanuelle Charpentier", "Zhang Feng", "George Church"],
         invDesc: "CRISPR-Cas9 is a revolutionary gene-editing tool that allows precise modification of DNA in living organisms.",
@@ -699,7 +699,7 @@ const LEVELS = [
         trivia: "CRISPR was inspired by an immune defense mechanism bacteria use against viruses — scientists essentially borrowed a bacterial 'GPS + scissors' system for gene editing."
       },
       {
-        invention: "Pacemaker", invImg: "images/pacemaker.jpg", invLabel: "Implantable Pacemaker (1958)",
+        invention: "Pacemaker", invEmoji: "❤️", invGrad1: "#1a0000", invGrad2: "#660000", invImg: "images/pacemaker.jpg", invLabel: "Implantable Pacemaker (1958)",
         sciImg: "images/elmqvist.jpg", answer: "Rune Elmqvist",
         options: ["Rune Elmqvist", "Wilson Greatbatch", "Paul Zoll", "William Chardack"],
         invDesc: "The implantable cardiac pacemaker regulates heartbeats electrically, saving millions of lives by treating heart rhythm disorders.",
@@ -707,7 +707,7 @@ const LEVELS = [
         trivia: "Arne Larsson, the first pacemaker patient, outlived both his surgeon and the inventor of his device, dying in 2001 at age 86 — with his 26th pacemaker."
       },
       {
-        invention: "MRI Scanner", invImg: "images/mri.jpg", invLabel: "MRI Scanner (1977)",
+        invention: "MRI Scanner", invEmoji: "🧲", invGrad1: "#001a1a", invGrad2: "#004444", invImg: "images/mri.jpg", invLabel: "MRI Scanner (1977)",
         sciImg: "images/damadian.jpg", answer: "Raymond Damadian",
         options: ["Raymond Damadian", "Paul Lauterbur", "Peter Mansfield", "Felix Bloch"],
         invDesc: "The MRI scanner uses magnetic fields and radio waves to produce detailed images of organs and tissues inside the body without radiation.",
@@ -715,7 +715,7 @@ const LEVELS = [
         trivia: "The first full-body MRI scan took nearly 5 hours in 1977. Modern MRI scanners can image the whole body in under 45 minutes."
       },
       {
-        invention: "Synthetic Insulin", invImg: "images/insulin.jpg", invLabel: "Biosynthetic Insulin (1982)",
+        invention: "Synthetic Insulin", invEmoji: "⚗️", invGrad1: "#001a0d", invGrad2: "#004d26", invImg: "images/insulin.jpg", invLabel: "Biosynthetic Insulin (1982)",
         sciImg: "images/boyer.jpg", answer: "Herbert Boyer",
         options: ["Herbert Boyer", "Frederick Banting", "Charles Best", "Rosalind Yalow"],
         invDesc: "Herbert Boyer co-pioneered recombinant DNA technology and co-founded Genentech, producing the first genetically engineered human insulin in 1982.",
@@ -723,7 +723,7 @@ const LEVELS = [
         trivia: "Before synthetic insulin, diabetics depended on insulin extracted from pig and cow pancreases. Boyer's breakthrough made human insulin affordable and widely available."
       },
       {
-        invention: "Contraceptive Pill", invImg: "images/pill.jpg", invLabel: "Oral Contraceptive (1960)",
+        invention: "Contraceptive Pill", invEmoji: "💊", invGrad1: "#1a001a", invGrad2: "#550055", invImg: "images/pill.jpg", invLabel: "Oral Contraceptive (1960)",
         sciImg: "images/pincus.jpg", answer: "Gregory Pincus",
         options: ["Gregory Pincus", "Margaret Sanger", "Carl Djerassi", "Katherine McCormick"],
         invDesc: "The oral contraceptive pill gave women control over reproduction, sparking social and cultural revolutions worldwide.",
@@ -731,7 +731,7 @@ const LEVELS = [
         trivia: "The pill was originally funded by suffragist Katharine McCormick, who donated more than $2 million (roughly $20 million today) to the research — making her one of history's most impactful science patrons."
       },
       {
-        invention: "Solar Cell", invImg: "images/solar_cell.jpg", invLabel: "Practical Solar Cell (1954)",
+        invention: "Solar Cell", invEmoji: "☀️", invGrad1: "#1a0e00", invGrad2: "#664400", invImg: "images/solar_cell.jpg", invLabel: "Practical Solar Cell (1954)",
         sciImg: "images/chapin.jpg", answer: "Daryl Chapin",
         options: ["Daryl Chapin", "Charles Fritts", "Bell Labs Team", "Albert Einstein"],
         invDesc: "The first practical silicon solar cell converted sunlight directly into electricity at 6% efficiency — opening the door to solar power.",
@@ -739,7 +739,7 @@ const LEVELS = [
         trivia: "When the Bell solar cell was announced, the New York Times called it 'the beginning of a new era, leading eventually to the realization of one of mankind's most cherished dreams — the harnessing of the almost limitless energy of the sun.'"
       },
       {
-        invention: "Optical Fiber", invImg: "images/optical_fiber.jpg", invLabel: "Optical Fiber (1966)",
+        invention: "Optical Fiber", invEmoji: "🔦", invGrad1: "#001433", invGrad2: "#003366", invImg: "images/optical_fiber.jpg", invLabel: "Optical Fiber (1966)",
         sciImg: "images/kao.jpg", answer: "Charles Kao",
         options: ["Charles Kao", "Robert Maurer", "Narinder Singh Kapany", "Ted Maiman"],
         invDesc: "Optical fiber enables high-speed data transmission via light pulses, forming the backbone of modern internet and telecommunications.",
@@ -828,11 +828,13 @@ function renderQuestion() {
   document.getElementById('q-counter').textContent = `${gs.qIndex + 1} / 10`;
   document.getElementById('score-tag').textContent = gs.score + ' pts';
 
-  // image & label
-  const img = document.getElementById('inv-img');
-  img.style.display = '';
-  img.style.opacity = '1';
-  img.src = './' + q.invImg;
+  // Draw invention card on canvas
+  const canvas = document.getElementById('inv-canvas');
+  const wrap = canvas.parentElement;
+  canvas.width = wrap.offsetWidth || 640;
+  canvas.height = Math.round(canvas.width * 9/16);
+  drawInventionCard(canvas, q);
+  window._currentQ = q;
   document.getElementById('inv-label').textContent = q.invLabel;
 
   // options (shuffled)
@@ -889,7 +891,17 @@ function selectAnswer(chosen, q) {
 
 function populateDetailCard(q, isCorrect) {
   const thumb = document.getElementById('sci-thumb');
-  thumb.src = './' + q.sciImg;
+  const tctx = thumb.getContext('2d');
+  // Draw scientist avatar
+  const initials = q.answer.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const tg = tctx.createLinearGradient(0,0,58,58);
+  tg.addColorStop(0, q.invGrad2 || '#4e54c8');
+  tg.addColorStop(1, q.invGrad1 || '#1a1d3b');
+  tctx.fillStyle = tg;
+  tctx.beginPath(); tctx.arc(29,29,29,0,Math.PI*2); tctx.fill();
+  tctx.font = 'bold 20px sans-serif';
+  tctx.fillStyle = '#fff'; tctx.textAlign = 'center'; tctx.textBaseline = 'middle';
+  tctx.fillText(initials, 29, 29);
   document.getElementById('sci-name').textContent = q.answer;
   document.getElementById('sci-years').textContent = q.invention;
   document.getElementById('result-badge').textContent = isCorrect ? '✅' : '❌';
@@ -1046,6 +1058,59 @@ function launchConfetti() {
   draw();
 }
 
+
+// ═══════════════════════════════════════════════
+//  CANVAS ILLUSTRATION RENDERER
+// ═══════════════════════════════════════════════
+function drawInventionCard(canvas, q) {
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  // Background gradient
+  const grad = ctx.createLinearGradient(0, 0, W, H);
+  grad.addColorStop(0, q.invGrad1 || '#1a1d3b');
+  grad.addColorStop(1, q.invGrad2 || '#2d3170');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle grid pattern
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 1;
+  const step = Math.round(W / 14);
+  for (let x = 0; x < W; x += step) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  for (let y = 0; y < H; y += step) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+  // Radial glow behind emoji
+  const glowR = H * 0.42;
+  const glow = ctx.createRadialGradient(W/2, H*0.45, 0, W/2, H*0.45, glowR);
+  glow.addColorStop(0, 'rgba(255,255,255,0.08)');
+  glow.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = glow;
+  ctx.beginPath();
+  ctx.arc(W/2, H*0.45, glowR, 0, Math.PI*2);
+  ctx.fill();
+
+  // Emoji — large, centered
+  const emojiSize = Math.round(H * 0.48);
+  ctx.font = `${emojiSize}px serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(q.invEmoji || '🔬', W/2, H * 0.44);
+
+  // Bottom gradient overlay for label readability
+  const overlay = ctx.createLinearGradient(0, H*0.55, 0, H);
+  overlay.addColorStop(0, 'rgba(10,12,40,0)');
+  overlay.addColorStop(1, 'rgba(10,12,40,0.88)');
+  ctx.fillStyle = overlay;
+  ctx.fillRect(0, H*0.55, W, H*0.45);
+
+  // Decorative corner dots
+  ctx.fillStyle = 'rgba(255,255,255,0.12)';
+  [[12,12],[W-12,12],[12,H-12],[W-12,H-12]].forEach(([x,y]) => {
+    ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fill();
+  });
+}
+
 // ═══════════════════════════════════════════════
 //  UTILS
 // ═══════════════════════════════════════════════
@@ -1083,6 +1148,15 @@ function resetProgress() {
 // ═══════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════
+window.addEventListener('resize', () => {
+  const canvas = document.getElementById('inv-canvas');
+  if (canvas && canvas.style.display !== 'none' && window._currentQ) {
+    const wrap = canvas.parentElement;
+    canvas.width = wrap.offsetWidth || 640;
+    canvas.height = Math.round(canvas.width * 9/16);
+    drawInventionCard(canvas, window._currentQ);
+  }
+});
 renderHome();
 </script>
 </body>
