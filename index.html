@@ -180,11 +180,19 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 .invention-img-wrap {
-  width: 100%; aspect-ratio: 16/9; overflow: hidden; position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(135deg, var(--c2), var(--c1));
 }
 .invention-img-wrap img {
-  width: 100%; height: 100%; object-fit: cover;
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
   transition: transform 0.3s;
 }
 .invention-img-wrap:hover img { transform: scale(1.03); }
@@ -413,7 +421,6 @@ body {
       <img id="inv-img" src="" alt="invention" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 800 450%22%3E%3Crect fill=%22%232d3170%22 width=%22800%22 height=%22450%22/%3E%3Ctext y=%22200%22 x=%22400%22 text-anchor=%22middle%22 font-size=%22100%22%3E🔬%3C/text%3E%3Ctext y=%22280%22 x=%22400%22 text-anchor=%22middle%22 font-size=%2224%22 fill=%22%238890b0%22%3EImage not found%3C/text%3E%3C/svg%3E'">
       <div class="img-overlay"></div>
       <div class="invention-label" id="inv-label"></div>
-      <div id="img-debug" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.6);color:#FFD166;font-size:0.65rem;padding:3px 8px;border-radius:6px;font-family:monospace;z-index:2;max-width:90%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
     </div>
     <div class="q-question">🔍 Who invented this?</div>
     <div class="options-grid" id="options-grid"></div>
@@ -827,7 +834,6 @@ function renderQuestion() {
   img.style.opacity = '1';
   img.src = './' + q.invImg;
   document.getElementById('inv-label').textContent = q.invLabel;
-  document.getElementById('img-debug').textContent = q.invImg;
 
   // options (shuffled)
   const opts = shuffle([...q.options]);
